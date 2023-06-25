@@ -12,6 +12,14 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
+
+@media screen and (max-width: 756px) {
+  .search-input-container {
+    width: 250px;
+    margin-left: 3px;
+    margin-top: 95px;
+  }
+}
 .search-input {
   background-color: #f1f5f9;
   color: #0f172a;
