@@ -2,6 +2,7 @@ import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import Header from '../Header'
 import BookItem from '../BookItem'
+import SearchBooks from '../SearchBooks'
 
 import './index.css'
 
@@ -15,7 +16,6 @@ const apiStatusConstants = {
 class Home extends Component {
   state = {
     booksList: [],
-    apiStatus: apiStatusConstants.initial,
     searchInput: '',
   }
 
@@ -27,20 +27,22 @@ class Home extends Component {
     this.setState({
       apiStatus: apiStatusConstants.inProgress,
     })
-    const apiUrl = ``
+    const {searchInput} = this.state
+    const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=books&title=${searchInput}&key=AIzaSyBaHGqMwuREMhGq94Y-2KG-8tsxKq4CpuM&maxResults=40`
     const options = {
       method: 'GET',
     }
     const response = await fetch(apiUrl, options)
+    const fetchedData = await response.json()
+    console.log(response)
+
     if (response.ok) {
-      const fetchedData = await response.json()
-      const updatedData = fetchedData.products.map(product => ({
-        title: product.title,
-        brand: product.brand,
-        price: product.price,
-        id: product.id,
-        imageUrl: product.image_url,
-        rating: product.rating,
+      const updatedData = fetchedData.items.map(item => ({
+        id: item.id,
+        title: item.volumeInfo.title,
+        author: item.volumeInfo.authors,
+        image: item.volumeInfo.imageLinks.smallThumbnail,
+        publishedDate: item.volumeInfo.publishedDate,
       }))
       this.setState({
         booksList: updatedData,
@@ -94,8 +96,10 @@ class Home extends Component {
           className="no-products-img"
           alt="no products"
         />
-        <h1 className="no-products-heading">No Books Found</h1>
-        <p className="no-products-description">We could not find any Books.</p>
+        <h1 className="no-products-heading">No Products Found</h1>
+        <p className="no-products-description">
+          We could not find any products. Try other filters.
+        </p>
       </div>
     )
   }
@@ -115,10 +119,34 @@ class Home extends Component {
     }
   }
 
+  clearFilters = () => {
+    this.setState(
+      {
+        searchInput: '',
+      },
+      this.getProducts,
+    )
+  }
+
+  enterSearchInput = () => {
+    this.getProducts()
+  }
+
+  changeSearchInput = searchInput => {
+    this.setState({searchInput})
+  }
+
   render() {
+    const {searchInput} = this.state
+
     return (
       <div className="all-products-section">
         <Header />
+        <SearchBooks
+          searchInput={searchInput}
+          changeSearchInput={this.changeSearchInput}
+          enterSearchInput={this.enterSearchInput}
+        />
         {this.renderAllProducts()}
       </div>
     )
