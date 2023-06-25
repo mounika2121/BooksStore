@@ -24,12 +24,12 @@ class BookDetails extends Component {
   }
 
   getFormattedData = item => ({
-    title: item.volumeInfo.title,
+    title: item.items.volumeInfo.title,
     author: item.volumeInfo.authors,
     image: item.volumeInfo.imageLinks.thumbnail,
     publishedDate: item.volumeInfo.publishedDate,
     description: item.volumeInfo.description,
-    cost: item.saleInfo.saleability,
+    pageCount: item.volumeInfo.pageCount,
   })
 
   getProductData = async () => {
@@ -40,7 +40,7 @@ class BookDetails extends Component {
     this.setState({
       apiStatus: apiStatusConstants.inProgress,
     })
-    const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=books&id=${id}&key=AIzaSyBaHGqMwuREMhGq94Y-2KG-8tsxKq4CpuM&maxResults=40`
+    const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=books&${id}&key=AIzaSyBaHGqMwuREMhGq94Y-2KG-8tsxKq4CpuM&maxResults=40`
     const options = {
       method: 'GET',
     }
@@ -87,7 +87,14 @@ class BookDetails extends Component {
   renderProductDetailsView = () => {
     const {bookData} = this.state
     console.log(bookData)
-    const {title, author, description, image, publishedDate, cost} = bookData
+    const {
+      title,
+      author,
+      description,
+      image,
+      publishedDate,
+      pageCount,
+    } = bookData
     return (
       <div className="product-details-success-view">
         <div className="product-details-container">
@@ -96,7 +103,8 @@ class BookDetails extends Component {
             <h1 className="product-name">{title}</h1>
             <p>{author}</p>
             <p>{publishedDate}</p>
-            <p className="price-details">Rs {cost}/-</p>
+            <p>{pageCount}</p>
+            <p className="price-details">Rs 1000 /-</p>
             <p className="product-description">{description}</p>
             <hr className="horizontal-line" />
             <button type="button" className="button add-to-cart-btn">

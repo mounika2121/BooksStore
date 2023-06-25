@@ -40,7 +40,7 @@ class Home extends Component {
       const updatedData = fetchedData.items.map(item => ({
         id: item.id,
         title: item.volumeInfo.title,
-        author: item.volumeInfo.authors,
+        averageRating: item.volumeInfo.averageRating,
         image: item.volumeInfo.imageLinks.smallThumbnail,
         publishedDate: item.volumeInfo.publishedDate,
       }))

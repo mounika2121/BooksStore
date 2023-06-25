@@ -4,8 +4,9 @@
   justify-content: center;
   align-items: center;
   height: 70vh;
+  margin-top: 50px;
 }
 
 .not-found-img {
-  width: 400px;
+  width: 500px;
 }
